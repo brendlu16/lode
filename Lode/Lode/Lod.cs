@@ -43,5 +43,9 @@ namespace Lode
                 }
             }
         }
+        public bool Kontrola()
+        {
+            return potopena;
+        }
     }
 }

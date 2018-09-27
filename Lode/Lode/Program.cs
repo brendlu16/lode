@@ -18,6 +18,11 @@ namespace Lode
         public static int VyskaPole = 16;
         static void Main(string[] args)
         {
+            InitPole();
+            Hra();
+        }
+        public static void InitPole()
+        {
             for (int i = 0; i < VyskaPole; i++)
             {
                 List<Bod> Body2H1 = new List<Bod>();
@@ -36,16 +41,18 @@ namespace Lode
                 }
                 BodyH2.Add(Body2H2);
             }
-
+        }
+        public static void Hra()
+        {
             Console.Clear();
             Console.WriteLine("Hráč 1 umisťuje své lodě");
             System.Threading.Thread.Sleep(2500);
 
-            Umisteni(1,1);
-            Umisteni(1,2);
-            Umisteni(1,3);
-            Umisteni(1,4);
-            ZobrazeniLodi(1, false);
+            Umisteni(1, 1);
+            Umisteni(1, 2);
+            Umisteni(1, 3);
+            Umisteni(1, 4);
+            ZobrazeniLodi(2, false);
             System.Threading.Thread.Sleep(2000);
 
             Console.Clear();
@@ -53,18 +60,26 @@ namespace Lode
             Console.WriteLine("Stiskni klávesu...");
             Console.ReadKey();
 
-            Umisteni(2,1);
-            Umisteni(2,2);
-            Umisteni(2,3);
-            Umisteni(2,4);
-            ZobrazeniLodi(2, false);
+            Umisteni(2, 1);
+            Umisteni(2, 2);
+            Umisteni(2, 3);
+            Umisteni(2, 4);
+            ZobrazeniLodi(1, false);
             System.Threading.Thread.Sleep(2000);
 
             while (true)
             {
                 Stridani(1);
+                if (KontrolaStavu(2))
+                {
+                    break;
+                }
                 Strelba(1);
                 Stridani(2);
+                if (KontrolaStavu(1))
+                {
+                    break;
+                }
                 Strelba(2);
             }
         }
@@ -320,13 +335,13 @@ namespace Lode
 
             if (hrac == 1)
             {
-                Lode = LodeH1;
-                Body = BodyH1;
+                Lode = LodeH2;
+                Body = BodyH2;
             }
             if (hrac == 2)
             {
-                Lode = LodeH2;
-                Body = BodyH2;
+                Lode = LodeH1;
+                Body = BodyH1;
             }
 
             while (true)
@@ -389,28 +404,36 @@ namespace Lode
                 }
                 if (key.Key == ConsoleKey.Spacebar)
                 {
-                    Body[kurzory][kurzorx].Vystrel(hrac);
+                    Body[kurzory][kurzorx].Vystrel(3-hrac);
                     konectahu = true;
                 }
             }
         }
         public static void Stridani(int hrac)
         {
-            Console.Clear();
-            Console.WriteLine("Hraje hráč číslo " + hrac);
-            System.Threading.Thread.Sleep(2500);
+            if (KontrolaStavu(hrac))
+            {
+                Console.WriteLine("Hráč " + hrac + " potopil všechny lodě hráče " + (3 - hrac) + " a zvítězil");
+                Console.WriteLine("Stiskem klávesy ukončíš hru");
+                Console.ReadKey();
+            } else
+            {
+                Console.Clear();
+                Console.WriteLine("Hraje hráč číslo " + hrac);
+                System.Threading.Thread.Sleep(2500);
+            }
         }
         public static void ZobrazeniLodi(int hrac, bool enemy)
         {
             if (hrac == 1)
             {
-                Lode = LodeH1;
-                Body = BodyH1;
+                Lode = LodeH2;
+                Body = BodyH2;
             }
             if (hrac == 2)
             {
-                Lode = LodeH2;
-                Body = BodyH2;
+                Lode = LodeH1;
+                Body = BodyH1;
             }
             Console.Clear();
             for (int i2 = 0; i2 < VyskaPole; i2++)
@@ -419,6 +442,34 @@ namespace Lode
                 {
                     Body[i2][i3].Vypsat(enemy);
                 }
+            }
+        }
+        public static bool KontrolaStavu(int hrac)
+        {
+            if ((3 - hrac) == 1)
+            {
+                Lode = LodeH1;
+                Body = BodyH1;
+            }
+            if ((3 - hrac) == 2)
+            {
+                Lode = LodeH2;
+                Body = BodyH2;
+            }
+            int pocetpotopenych = 0;
+            for (int i = 0; i < Lode.Count; i++)
+            {
+                if (Lode[i].Kontrola())
+                {
+                    pocetpotopenych++;
+                }
+            }
+            if (pocetpotopenych == Lode.Count)
+            {
+                return true;
+            } else
+            {
+                return false;
             }
         }
     }

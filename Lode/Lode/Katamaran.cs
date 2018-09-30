@@ -12,6 +12,8 @@ namespace Lode
         static List<int> pozicey = new List<int>();
         public static void Nastaveni()
         {
+            pozicex.Clear();
+            pozicey.Clear();
             pozicex.Add(-1);
             pozicex.Add(1);
             pozicex.Add(-1);

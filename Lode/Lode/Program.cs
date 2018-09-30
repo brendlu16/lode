@@ -69,17 +69,23 @@ namespace Lode
 
             while (true)
             {
-                Stridani(1);
                 if (KontrolaStavu(2))
                 {
+                    Console.Clear();
+                    Console.WriteLine("Konec hry, vyhrál hráč číslo 2!");
+                    System.Threading.Thread.Sleep(5000);
                     break;
                 }
+                Stridani(1);
                 Strelba(1);
-                Stridani(2);
                 if (KontrolaStavu(1))
                 {
+                    Console.Clear();
+                    Console.WriteLine("Konec hry, vyhrál hráč číslo 1!");
+                    System.Threading.Thread.Sleep(5000);
                     break;
                 }
+                Stridani(2);
                 Strelba(2);
             }
         }
@@ -363,14 +369,21 @@ namespace Lode
                         }
                     }
                 }
-                Console.WriteLine(" ");
-                Console.WriteLine("Hraje hráč číslo " + hrac);
-                Console.WriteLine("Šipkami zamiř, poté vystřel stiskem mezerníku");
-
                 if (konectahu)
                 {
+                    Console.WriteLine(" ");
+                    Console.WriteLine("Netrefil ses! Konec tahu");
                     System.Threading.Thread.Sleep(2000);
                     break;
+                } else
+                {
+                    Console.WriteLine(" ");
+                    Console.WriteLine("Hraje hráč číslo " + hrac);
+                    Console.WriteLine("Šipkami zamiř, poté vystřel stiskem mezerníku");
+                    if (KontrolaStavu(hrac))
+                    {
+                        break;
+                    }
                 }
 
                 ConsoleKeyInfo key = Console.ReadKey();
@@ -404,8 +417,11 @@ namespace Lode
                 }
                 if (key.Key == ConsoleKey.Spacebar)
                 {
-                    Body[kurzory][kurzorx].Vystrel(3-hrac);
-                    konectahu = true;
+                    Body[kurzory][kurzorx].Vystrel(hrac);
+                    if (!Body[kurzory][kurzorx].JeZasah())
+                    {
+                        konectahu = true;
+                    }
                 }
             }
         }
@@ -446,12 +462,12 @@ namespace Lode
         }
         public static bool KontrolaStavu(int hrac)
         {
-            if ((3 - hrac) == 1)
+            if (hrac == 2)
             {
                 Lode = LodeH1;
                 Body = BodyH1;
             }
-            if ((3 - hrac) == 2)
+            if (hrac == 1)
             {
                 Lode = LodeH2;
                 Body = BodyH2;

@@ -65,12 +65,12 @@ namespace Lode
         }
         public void Vystrel(int hrac)
         {
-            if (hrac == 1)
+            if (hrac == 2)
             {
                 Program.Lode = Program.LodeH1;
                 Program.Body = Program.BodyH1;
             }
-            if (hrac == 2)
+            if (hrac == 1)
             {
                 Program.Lode = Program.LodeH2;
                 Program.Body = Program.BodyH2;
@@ -89,6 +89,16 @@ namespace Lode
             {
                 Stav = 4;
                 Program.Lode[CisloLode].Zasah(hrac);
+            }
+        }
+        public bool JeZasah ()
+        {
+            if (Stav == 4 || Stav == 5)
+            {
+                return true;
+            } else
+            {
+                return false;
             }
         }
     }
